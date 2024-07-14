@@ -1,0 +1,162 @@
+body {
+  font-family: 'Roboto Slab', serif !important;
+  background-image: url("../assets/bgbg.jpg") !important;
+ 
+  background-position: center bottom;
+  background-size: cover; 
+  background-attachment: fixed; 
+  background-repeat: no-repeat;
+  overflow-y: auto
+}
+
+@media (max-width: 768px) {
+  body {
+      background-size: 200%; 
+  }
+}
+/* 
+  navbar-custom{
+  background-image: url("../assets/bg.jpeg") !important;
+  background-size: cover; 
+  background-repeat: no-repeat; 
+  padding: 20px; 
+  color: white; 
+  }
+   */
+
+
+  .pet-info {
+    margin-bottom: 10px;
+    padding: 10px;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+/*  */
+
+.pet-info p {
+    margin: 5px 0;
+}
+
+#CustomTable.custom-table {
+  border-collapse: collapse;
+  font-size: 0.9em;
+  padding-top: 2px;
+  min-width: 200px;
+  text-align: center;
+  border: solid 1px transparent; 
+  margin: 0 auto;
+  border-radius: 10px; 
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); 
+  overflow: hidden; 
+  width: 100%; 
+  max-width: 100%;
+  background-color: rgba(211, 211, 211, 0.8);
+  /* opacity: 0.8 */
+
+  
+}
+
+#CustomTable.custom-table thead {
+  
+  font-weight: bold;
+  background-image: url('../assets/bg.jpg'); 
+  background-size: cover;
+  background-repeat: no-repeat;
+  padding-top: 30px;
+}
+
+#CustomTable.custom-table tbody > tr > td:first-child {
+  font-weight: bold;
+  color: #333;
+  padding-left: 10px;
+}
+
+@media (max-width: 933px) {
+  #CustomTable.custom-table {
+    font-size: 9px; 
+    max-width: 100%; 
+  }
+}
+
+#CustomTable.custom-table tbody > tr,
+#CustomTable.custom-table thead {
+  border-bottom: 1px solid #ccc; 
+}
+/* #content-table th tr{
+  background-color: #009879;
+} 
+
+.table-container {
+    margin: 20px;
+  overflow: hidden;
+  border-radius: 20px ;
+  }
+  
+  .table-heading {
+    margin-bottom: 10px;
+  }
+  
+  .custom-table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid #ddd;
+    font-size: 0.9em;
+    min-width: 400px;
+    
+    margin-top: 10px; 
+    overflow-x: auto;  
+}
+  
+.custom-table th, .custom-table td {
+    padding: 8px;
+    text-align: center;
+    border: 3px solid #fff;
+  }
+  
+  .custom-table tbody tr:nth-child(even) {
+    background-image: black;
+    color:white
+  }
+  
+  
+  .custom-table tbody tr:nth-child(odd) {
+    background-color: #f2f2f2;
+  }
+  
+  /* .custom-table tr td:nth-last-child(-n+2),
+  .custom-table tr th:nth-last-child(-n+2) {
+    border: none; 
+    
+  }  */ */
+
+  .btn:focus {
+    outline: none; 
+  }
+
+  
+
+.custom-navbar {
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1) !important;
+}
+
+.navbar-logo {
+  max-width: 60px  !important;;
+  height: auto  !important;; 
+  margin-right: 10px  !important;;
+}
+
+.nav-link {
+  color: grey  !important;;
+  padding: 10px 15px  !important;; 
+  transition: all 0.3s ease  !important;; 
+}
+
+.nav-link:hover {
+  color: #333 !important;;
+  text-decoration: none  !important;;
+}
+
+.navbar-toggler-icon {
+  color: #333  !important;; 
+}
