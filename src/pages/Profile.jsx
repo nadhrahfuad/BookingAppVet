@@ -5,6 +5,7 @@ import AvailabilityForm from '../components/SetAvailability';
 import { Button, Modal, Form, Alert} from 'react-bootstrap';
 import SetAvailability from '../components/SetAvailability';
 
+
 const UserProfile = () => {
   const {auth, setAuth} = useAuth()
   const [isEditMode, setIsEditMode] = useState(false);
@@ -278,6 +279,8 @@ if(error.respone){
             />
             
           </Form.Group>
+
+          {auth.role !== "admin" && (
           <Form.Group controlId = "formPhoneNumber">
             <Form.Label className="mt-3">Phone Number</Form.Label>
             <Form.Control 
@@ -287,10 +290,11 @@ if(error.respone){
             placeholder= "Enter phone number"
             onChange = {handleInputChange}
             disabled = {!isEditMode}
-
+          
             />
             
           </Form.Group>
+          )}
           {(auth.role === "vet")&&(
             <>
           <Form.Group controlId = "formBio">

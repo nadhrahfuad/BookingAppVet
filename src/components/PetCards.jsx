@@ -18,8 +18,9 @@ function PetCardsList({ pets, handleRegisterPet }) {
   useEffect(() => {
     const fetchPetList = async () => {
       try {
-        await axios.get(`${BASE_URL}/${auth.role}/${auth.id}/petslist`);
+        const response = await axios.get(`${BASE_URL}/${auth.role}/${auth.id}/petslist`);
 
+        console.log(response.data)
         console.log('Pets list retrieved successfully');
       } catch (error) {
         if (error.response) {

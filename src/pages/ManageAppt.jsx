@@ -5,8 +5,8 @@ import useAuth from "../contexts/useAuth"
 import "../css/custom.css"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {faEye} from "@fortawesome/free-solid-svg-icons";
-import { faPenToSquare  } from "@fortawesome/free-regular-svg-icons";
-import { faTrashCan } from '@fortawesome/free-solid-svg-icons';
+import { faTrashCan, faPenToSquare } from '@fortawesome/free-solid-svg-icons';
+import PetModal from '../components/PetModal';
 
 
 
@@ -19,6 +19,9 @@ const AppointmentTable = () => {
   const [showModal, setShowModal] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [showPetModal, setShowPetModal] = useState(false)
+
+
   const [refreshTable, setRefreshTable] = useState(false);
   const [cancelAlert, setCancelAlert] = useState(null);
   const [showRemoveModal, setShowRemoveModal] = useState(false)
@@ -26,6 +29,7 @@ const AppointmentTable = () => {
   const [error, setError] = useState(false)
   const [success, setSuccess] = useState(false)
   const [showGif, setShowGif] = useState(false)
+  const [selectedPet, setSelectedPet] = useState(null);
 
   
  const BASE_URL = process.env.REACT_APP_BASE_URL;
@@ -111,14 +115,10 @@ const AppointmentTable = () => {
     console.log("here",selectedAppointment)
     try {
 
-      const updatedAppointment = {
-        ...selectedAppointment,
-        appointment_id: selectedAppointment.appointment_id,
-        action: "edit" 
-      };
-
-
-      const response = await axios.patch(`${BASE_URL}/${auth.role}/${auth.id}/manage/${updatedAppointment.id}/`, updatedAppointment);
+      const response = await axios.patch(`${BASE_URL}/${auth.role}/${auth.id}/manage/${selectedAppointment.appointment_id}/`, {
+        action: "edit",
+        reason: selectedAppointment.reason
+      });
 
       setRefreshTable(prev => !prev); 
       setSuccess(response.data)
@@ -140,17 +140,15 @@ const AppointmentTable = () => {
   };
 
   const handleRemove = async () => {
-    console.log(selectedAppointment)
+    console.log(selectedAppointment.appointment_id)
     try {
 
       setLoading(true)
-      const updatedAppointment = {
-        ...selectedAppointment,
-        appointment_id: selectedAppointment.appointment_id,
-        action: "remove" 
-      };
 
-      const response = await axios.patch(`${BASE_URL}/${auth.role}/${auth.id}/manage/${updatedAppointment.id}/`, updatedAppointment);
+      const response = await axios.patch(`${BASE_URL}/${auth.role}/${auth.id}/manage/${selectedAppointment.appointment_id}/`, {
+        action: "remove"
+      }
+      );
       closeRemoveModal();
       setRefreshTable(prev => !prev); 
       setSuccess(response.data)
@@ -192,19 +190,54 @@ const AppointmentTable = () => {
     setShowConfirmModal(false);
   };
 
+  const handleStatusChange = async(e, appointment_id) => {
+    const updatedStatus = e.target.value;
+    console.log("Status", updatedStatus)
+    console.log(appointment_id)
+    console.log("appt", appointment_id)
+    try{
+
+      
+      const updatedAppointment = {
+        status: updatedStatus,
+        action: "update"
+      }
+      const response = await axios.patch(
+        `${BASE_URL}/${auth.role}/${auth.id}/manage/${appointment_id}`,
+       updatedAppointment
+      );
+      setRefreshTable((prev) => !prev);
+      setSuccess(response.data);
+      console.log('Appointment status updated successfully');
+    } catch (error) {
+      if (error.response) {
+        setError(error.response.data.message);
+        console.error('Error:', error.response.data);
+      } else if (error.request) {
+        setError('Network error. Please try again later.');
+        console.error('Network error:', error.request);
+      } else {
+        setError('An unexpected error occurred. Please try again.');
+        console.error('Unexpected error:', error.message);
+      }
+    }
+
+    
+  }
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setSelectedAppointment({ ...selectedAppointment, [name]: value });
+  };
+
+
+
   const handleCancel = async () => {
     console.log(selectedAppointment.appointment_id)
 
     try {
 
-      const updatedAppointment = {
-        ...selectedAppointment,
-        appointment_id: selectedAppointment.appointment_id,
-        action: "cancel" 
-      };
-
-      const response = await axios.patch(`${BASE_URL}/${auth.role}/${auth.id}/manage/${updatedAppointment.id}`,{
-        appointment_id: updatedAppointment.appointment_id,
+      const response = await axios.patch(`${BASE_URL}/${auth.role}/${auth.id}/manage/${selectedAppointment.appointment_id}`,{
         action: "cancel"
       });
 
@@ -231,14 +264,31 @@ const AppointmentTable = () => {
     setShowConfirmModal(false)
   }
 
-  const handleInputChange = (event) => {
-    const { name, value } = event.target;
-    setSelectedAppointment({ ...selectedAppointment, [name]: value });
-  };
-
+ 
   const handleCancelAlertClose = () => {
     setCancelAlert(null);
   };
+
+  const handleOpenPetModal = async () => {
+    try {
+
+      const response = await axios.get(`${BASE_URL}/${auth.role}/${auth.id}/viewpets/${selectedAppointment.pet_id}`)
+
+      setSelectedPet(response.data)
+      setShowPetModal(true)
+    } catch (error) {
+      console.error('Failed to fetch pet details:', error);
+    }
+  };
+
+  const closePetModal = () => {
+    setShowPetModal(false);
+    setSelectedPet(null);
+  };
+
+  const handleClose = () => {
+    setShowModal(false)
+  }
 
   return (
     <div className="p-4 mt-4 ">
@@ -290,29 +340,35 @@ const AppointmentTable = () => {
           {(auth.role === "admin" || auth.role === "vet") && <td>{appointment.owner_name}</td>}
           <td>{appointment.day_of_week} {appointment.start_time} {appointment.end_time}</td>
           <td>
-            {auth.role === 'admin' || auth.role === 'vet' ? (
-              <select value={appointment.status}>
-                <option value="pending">Pending</option>
-                <option value="cancelled">Cancelled</option>
-                <option value="scheduled">Scheduled</option>
-              </select>
-            ) : (
-              <>
-                {appointment.status === 'pending' && (
-                  <Badge bg="primary">Pending</Badge>
-                )}
-                {appointment.status === 'cancelled' && (
-                  <Badge bg="danger">Cancelled</Badge>
-                )}
-                {appointment.status === 'scheduled' && (
-                  <Badge bg="warning" >Scheduled</Badge>
-                )}
-                {appointment.status === 'confirmed' && (
-                  <Badge bg="success">Confirmed</Badge>
-                )}
-              </>
-            )}
-          </td>
+  {appointment.status === 'cancelled' ? (
+    <Badge bg="danger">Cancelled</Badge>
+  ) : (
+    auth.role === 'admin' || auth.role === 'vet' ? (
+      <select
+        value={appointment && appointment.status}
+        onChange={(e) => handleStatusChange(e, appointment.appointment_id)}
+      >
+        <option value="pending" disabled={appointment.status === 'cancelled'}>Pending</option>
+        <option value="cancelled" disabled={appointment.status === 'cancelled'}>Cancelled</option>
+        <option value="scheduled" disabled={appointment.status === 'cancelled'}>Scheduled</option>
+        <option value="confirmed" disabled={appointment.status === 'cancelled'}>Confirmed</option>
+      </select>
+    ) : (
+
+      <>
+        {appointment.status === 'pending' && (
+          <Badge bg="primary">Pending</Badge>
+        )}
+        {appointment.status === 'scheduled' && (
+          <Badge bg="warning">Scheduled</Badge>
+        )}
+        {appointment.status === 'confirmed' && (
+          <Badge bg="success">Confirmed</Badge>
+        )}
+      </>
+    )
+  )}
+</td>
           <td className="d-flex border-0 justify-content-center align-items-center">
             {appointment.status !== "cancelled" ? (
               <Button variant="none" className="border-0" onClick={() => openModal(appointment)}>
@@ -333,7 +389,7 @@ const AppointmentTable = () => {
   </table>
 )}
 
-      {/* View/Edit Modal */}
+    
       <Modal show={showModal} onHide={closeModal}>
         <Modal.Header closeButton>
           <Modal.Title>Appointment Details for {selectedAppointment? `${selectedAppointment.pet_name}`:''}</Modal.Title>
@@ -364,17 +420,29 @@ const AppointmentTable = () => {
               />
             </Form.Group>
 
-            <Form.Group controlId="formPatientName">
-              <Form.Label className = "mt-2">Pet Name</Form.Label>
-              <Form.Control 
-                type="text" 
-                name="vet" 
-                value={selectedAppointment ? `${selectedAppointment.pet_name}`: ''}
-                readOnly
-                disabled
-                className="text-center"
-              />
-            </Form.Group>
+           {auth.role === "vet" ? (
+              <Form.Group controlId="formPatientName">
+                <div className='d-flex align-items-center mt-3'>
+                <Form.Label className="mt-2 ">Pet Name</Form.Label>
+                <div className=" flex-grow-1 d-flex justify-content-start align-items-center" style={{ paddingLeft: '120px' }}>
+                <Button  className="" variant="link" onClick={() => handleOpenPetModal(selectedAppointment.pet_id)} >{selectedAppointment ? `${selectedAppointment.pet_name}` : ''}</Button>
+                </div>
+                </div>
+              </Form.Group>
+              
+            ) : (
+              <Form.Group controlId="formPatientName">
+                <Form.Label className="mt-2">Pet Name</Form.Label>
+                <Form.Control
+                  type="text"
+                  name="pet_name"
+                  value={selectedAppointment ? `${selectedAppointment.pet_name}` : ''}
+                  readOnly
+                  disabled
+                  className="text-center"
+                />
+              </Form.Group>
+            )}
 
             <Form.Group controlId="formAppointmentTime">
               <Form.Label className = "mt-2">Schedule</Form.Label>
@@ -404,12 +472,26 @@ const AppointmentTable = () => {
           </Form>
         </Modal.Body>
         <Modal.Footer>
+          
+        {auth.role === "petowner" && selectedAppointment && selectedAppointment.status !== "cancelled" && (
+          <>
           {!editMode ? (
             <Button variant="info" onClick={handleEdit}>Edit</Button>
           ) : (
             <Button variant="primary" onClick={handleSave}>Update</Button>
           )}
-          <Button variant="danger" onClick={openConfirmModal}>Cancel Appointment</Button>
+ 
+          </>
+          )}
+      
+      { selectedAppointment && selectedAppointment.status !== "cancelled" && (
+    <Button variant="danger" onClick={openConfirmModal}>Cancel Appointment</Button>
+  )}
+
+  { selectedAppointment && selectedAppointment.status === "cancelled" && (
+    <Button variant="secondary" onClick={handleClose}>Close</Button>
+  )}
+      
         </Modal.Footer>
       </Modal>
 
@@ -453,6 +535,15 @@ const AppointmentTable = () => {
       </Modal>
       )}
 
+{showPetModal && selectedAppointment && (
+
+        <PetModal
+          selectedPet={selectedPet}
+          show={showPetModal}
+          handleClose={closePetModal}
+        />
+
+      )}
       {cancelAlert && (
         <Alert variant={cancelAlert.variant} onClose={handleCancelAlertClose} >
           {cancelAlert.message}

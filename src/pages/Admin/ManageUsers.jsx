@@ -89,9 +89,11 @@ const ManageUsers = () => {
   };
 
   const handleViewDetails = async (userId) => {
+    console.log("ID", userId)
     try {
       const response = await axios.get(`${BASE_URL}/${auth.role}/${auth.id}/${userId}/profile`);
       setSelectedUser(response.data);
+      console.log(response.data)
       setShowModal(true);
       console.log('Profile details retrieved successfully');
       console.log(response.data)
@@ -158,7 +160,7 @@ const ManageUsers = () => {
         </tbody>
       </table>
 
-      {/* Modal for displaying user details */}
+  
       <Modal show={showModal} onHide={handleCloseModal} centered backdrop="static">
         <Modal.Header closeButton>
           <Modal.Title>User Details</Modal.Title>
@@ -171,9 +173,13 @@ const ManageUsers = () => {
               <p><strong>Phone:</strong> {selectedUser.phone}</p>
     
 
+                {selectedUser.role === "vet" && (
+                  <>
                 <p><strong>Specialisation:</strong> {selectedUser.specialization}</p>
                 <p><strong>License No.:</strong> {selectedUser.license_number}</p>
                 <p><strong>Bio:</strong> {selectedUser.bio}</p>
+                </>
+                )}
 
 
 

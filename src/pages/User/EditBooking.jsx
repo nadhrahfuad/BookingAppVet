@@ -151,6 +151,7 @@ const EditBooking = () => {
                 <Card.Body>
                   <Card.Title>Booking Details</Card.Title>
                   <Card.Text>
+                    {/* FIXXX */}
 
                     <p> Appointment ID: {userBookingInfo.appointment_id}</p>
                     <p> Vet ID: {userBookingInfo.vet_id}</p>

@@ -1,9 +1,8 @@
-import { useState } from 'react';
-import { Card, Form, Button, Alert } from 'react-bootstrap';
+import axios from 'axios';
+import { useState, useEffect } from 'react';
+import { Card, Form, Button } from 'react-bootstrap';
 
 const ProfileForm = ({ onSubmit }) => {
-
-
   const [formData, setFormData] = useState({
     petPicture: '',
     petName: '',
@@ -13,20 +12,86 @@ const ProfileForm = ({ onSubmit }) => {
     breed: '',
     spayed: '',
     allergies: '',
-    healthConditions: '',
+    health_conditions: '',
   });
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
+  const [breedOptions, setBreedOptions] = useState([]);
+
+  const speciesOptions = [
+    { label: 'Dog', value: 'Dog' },
+    { label: 'Cat', value: 'Cat' },
+    { label: 'Bird', value: 'Bird' },
+    { label: 'Reptile', value: 'Reptile' },
+    { label: 'Other', value: 'Other' },
+  ];
+
+  useEffect(() => {
+
+    setBreedOptions([]);
+  }, [formData.species]);
+
+  const fetchBreeds = async (selectedSpecies) => {
+    try {
+      let response;
+      if (selectedSpecies === 'Dog') {
+        response = await axios.get('https://api.thedogapi.com/v1/breeds');
+      } else if (selectedSpecies === 'Cat') {
+        response = await axios.get('https://api.thecatapi.com/v1/breeds');
+      } else {
+        setBreedOptions([]);
+        return;
+      }
+
+      if (response.status === 200) {
+        const breeds = response.data.map((breed) => ({
+          label: breed.name,
+          value: breed.name,
+        }));
+        setBreedOptions(breeds);
+      } else {
+        console.log(`Error fetching ${selectedSpecies.toLowerCase()} breeds`);
+        setBreedOptions([]);
+      }
+    } catch (error) {
+      console.error('Error fetching breeds', error);
+      setBreedOptions([]);
+    }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSubmit(formData)
+    onSubmit(formData);
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+
+    if (name !== 'breed') {
+      setFormData(prevFormData => ({
+        ...prevFormData,
+        [name]: value,
+      }));
+    }
+
+    if (name === "species") {
+      setFormData(prevFormData => ({
+        ...prevFormData,
+        breed: '', 
+      }));
+      
+      if (value === "Dog" || value === "Cat") {
+        fetchBreeds(value);
+      } else {
+        setBreedOptions([]);
+      }
+    }
+
+    if (name === "breed") {
+      setFormData(prev => ({
+        ...prev,
+        breed: value,
+      }));
+    }
   };
 
   const fields = [
@@ -68,20 +133,15 @@ const ProfileForm = ({ onSubmit }) => {
       type: 'select',
       placeholder: 'Select species',
       required: true,
-      options: [
-        { label: 'Dog', value: 'Dog' },
-        { label: 'Cat', value: 'Cat' },
-        { label: 'Bird', value: 'Bird' },
-        { label: 'Reptile', value: 'Reptile' },
-        { label: 'Other', value: 'Other' },
-      ],
+      options: speciesOptions,
     },
     {
       name: 'breed',
       label: 'Breed',
-      type: 'text',
-      placeholder: 'Enter pet breed',
+      type: formData.species === "Dog" || formData.species === "Cat" ? "select" : "text",
+      placeholder: formData.species === "Dog" || formData.species === "Cat" ? 'Select breed' : 'Enter pet breed',
       required: true,
+      options: breedOptions,
     },
     {
       name: 'spayed',
@@ -102,7 +162,7 @@ const ProfileForm = ({ onSubmit }) => {
       required: false,
     },
     {
-      name: 'healthConditions',
+      name: 'health_conditions',
       label: 'Health Conditions (if any)',
       type: 'textarea',
       placeholder: 'Enter pet health conditions',
@@ -112,59 +172,60 @@ const ProfileForm = ({ onSubmit }) => {
 
   return (
     <Form onSubmit={handleSubmit}>
-    <Card className="mb-3">
-      <Card.Body>
-        {fields.map((field, index) => (
-          <Form.Group key={index} controlId={field.name}>
-            <Form.Label className='mt-2'>{field.label}</Form.Label>
-            {field.type === 'textarea' ? (
-              <Form.Control
-                as="textarea"
-                rows={3}
-                placeholder={field.placeholder}
-                name={field.name}
-                onChange={handleInputChange}
-                required={field.required}
-              />
-            ) : (
-              <>
-                {field.type === 'select' ? (
-                  <Form.Control
-                    as="select"
-                    name={field.name}
-                    onChange={handleInputChange}
-                  >
-                    <option value="">{field.placeholder}</option>
-                    {field.options.map((option, idx) => (
-                      <option key={idx} value={option.value}>
-                        {option.label}
-                      </option>
-                    ))}
-                  </Form.Control>
-                ) : (
-                  <Form.Control
-                    type={field.type}
-                    placeholder={field.placeholder}
-                    name={field.name}
-                    onChange={handleInputChange}
-                    required={field.required}
-                  />
-                )}
-              </>
-            )}
-          </Form.Group>
-        ))}
-      </Card.Body>
-    </Card>
-    <div className="d-flex justify-content-center">
-    <Button variant="primary"  className= "mx-2" type="submit">
-      Register
-    </Button>
-
-    
-    </div>
-  </Form>
-);
+      <Card className="mb-3">
+        <Card.Body>
+          {fields.map((field, index) => (
+            <Form.Group key={index} controlId={field.name}>
+              <Form.Label className='mt-2'>{field.label}</Form.Label>
+              {field.type === 'textarea' ? (
+                <Form.Control
+                  as="textarea"
+                  rows={3}
+                  placeholder={field.placeholder}
+                  name={field.name}
+                  onChange={handleInputChange}
+                  value={formData[field.name]}
+                  required={field.required}
+                />
+              ) : (
+                <>
+                  {field.type === 'select' ? (
+                    <Form.Control
+                      as="select"
+                      name={field.name}
+                      onChange={handleInputChange}
+                      value={formData[field.name]}
+                    >
+                      <option value="">{field.placeholder}</option>
+                      {field.options.map((option, idx) => (
+                        <option key={idx} value={option.value}>
+                          {option.label}
+                        </option>
+                      ))}
+                    </Form.Control>
+                  ) : (
+                    <Form.Control
+                      type={field.type}
+                      placeholder={field.placeholder}
+                      name={field.name}
+                      onChange={handleInputChange}
+                      value={formData[field.name]}
+                      required={field.required}
+                    />
+                  )}
+                </>
+              )}
+            </Form.Group>
+          ))}
+        </Card.Body>
+      </Card>
+      <div className="d-flex justify-content-center">
+        <Button variant="primary" className="mx-2" type="submit">
+          Register
+        </Button>
+      </div>
+    </Form>
+  );
 };
 
 export default ProfileForm;

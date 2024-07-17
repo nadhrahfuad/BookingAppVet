@@ -12,6 +12,10 @@ import ViewPets from './pages/User/ViewPets';
 import ViewVets from './pages/User/ViewVets';
 import ManageAppt from './pages/ManageAppt';
 import ManageUsers from './pages/Admin/ManageUsers';
+// import { app } from "./firebase"
+
+
+
 
 function App() {
   const { auth } = useAuth(); 

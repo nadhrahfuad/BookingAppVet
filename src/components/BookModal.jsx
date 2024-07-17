@@ -164,7 +164,7 @@ const BookModal = ({ showModal, handleCloseModal, selectedVet }) => {
   };
 
   return (
-    <Modal show={showModal} onHide={handleCloseModal } centered backdrop="static">
+   <Modal show={showModal} onHide={handleCloseModal} centered >
       <Modal.Header closeButton >
       </Modal.Header>
       <Modal.Body>
@@ -276,6 +276,7 @@ const BookModal = ({ showModal, handleCloseModal, selectedVet }) => {
         </Button>
       </Modal.Footer>
     </Modal>
+
   );
 };
 

@@ -12,7 +12,9 @@ const LoginForm = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
   const { setAuth } = useAuth();
- const BASE_URL = process.env.REACT_APP_BASE_URL;
+  const BASE_URL = process.env.REACT_APP_BASE_URL;
+
+  console.log(process.env.REACT_APP_BASE_URL);
 
   const handleLogin = async (e) => {
     e.preventDefault();
