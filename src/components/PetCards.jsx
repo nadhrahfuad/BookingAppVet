@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { Container, Row, Col, Card, Button, Alert } from 'react-bootstrap';
+import { useState, useEffect } from 'react';
+import { Container, Row, Col, Card, Alert } from 'react-bootstrap';
 import axios from 'axios';
 import useAuth from '../contexts/useAuth';
 import PetModal from './PetModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCirclePlus } from '@fortawesome/free-solid-svg-icons';
+import { faCirclePlus, faPenToSquare } from '@fortawesome/free-solid-svg-icons';
 import Dog from "../assets/dog.jpeg"
 
 function PetCardsList({ pets, handleRegisterPet }) {
@@ -67,7 +67,7 @@ function PetCardsList({ pets, handleRegisterPet }) {
 
   // };
 
-const formattedBirthday=()=>{
+const formattedBirthday=(pet)=>{
   const date = pet.birthday.split('-');
   if(date.length === 3){
     const [year, month, day ] = date;
@@ -85,9 +85,9 @@ const formattedBirthday=()=>{
       )}
 
       {pets.length > 0 && (
-        <Row xs={1} md={2} lg={3} className="g-4">
+        <Row xs={1} md={2} lg={3} className="g-1">
           {pets.map((pet, index) => (
-            <Col key={index} className="p-3 ">
+            <Col key={index} className="p-2">
               <Card className="h-100 d-flex flex-column justify-content-between p-4">
                 <div className="d-flex justify-content-center mt-4">
                   <Card.Img
@@ -99,17 +99,20 @@ const formattedBirthday=()=>{
                 </div>
                 <Card.Body className="text-center">
                   <Card.Title>{pet.name}</Card.Title>
-                  <Card.Text>{pet.birthday}</Card.Text>
-                  <Card.Text className="text-muted">status</Card.Text>
-                  <Button variant="primary" onClick={() => handleOpenPetModal(pet)}>
-                    View Details
-                  </Button>
+                  <Card.Text className="text-muted">{formattedBirthday(pet)}</Card.Text>
+                  <div >
+                  <FontAwesomeIcon
+                    icon={faPenToSquare}
+                    style={{ color: '#60a2c3', fontSize: '20px', cursor: 'pointer' }}
+                    onClick={() => handleOpenPetModal(pet)}
+            />
+                  </div>
                 </Card.Body>
               </Card>
             </Col>
           ))}
-          <Col className="d-flex align-items-center justify-content-center col-12">
-          <div>
+          <Col className="d-flex align-items-center justify-content-center col-12" >
+          <div >
             <FontAwesomeIcon
               icon={faCirclePlus}
               style={{ color: '#60a2c3', fontSize: '50px', cursor: 'pointer' }}

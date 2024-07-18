@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
-import { Button, Table, Modal, Badge } from "react-bootstrap";
+import { Button, Modal, Badge } from "react-bootstrap";
 import useAuth from "../../contexts/useAuth";
 import axios from "axios";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {faToggleOn, faToggleOff, faEye} from "@fortawesome/free-solid-svg-icons";
+import Footer from "../../components/Footer";
 
 const ManageUsers = () => {
   const { auth } = useAuth();
@@ -119,6 +120,7 @@ const ManageUsers = () => {
   };
 
   return (
+    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
     <div className="p-4 mt-5">
       {/* <h2>Manage Users</h2>
       {error && <p>{error}</p>}
@@ -193,6 +195,8 @@ const ManageUsers = () => {
           </Button>
         </Modal.Footer>
       </Modal>
+    </div>
+    <Footer style={{ marginTop: 'auto' }} />
     </div>
   );
 };

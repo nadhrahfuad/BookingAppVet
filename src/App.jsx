@@ -12,7 +12,10 @@ import ViewPets from './pages/User/ViewPets';
 import ViewVets from './pages/User/ViewVets';
 import ManageAppt from './pages/ManageAppt';
 import ManageUsers from './pages/Admin/ManageUsers';
-// import { app } from "./firebase"
+import LandingPage from './pages/LandingPage';
+import AboutUs from './pages/AboutUs';
+import ContactUs from "./pages/ContactUs"
+import ErrorPage from "./pages/Error"
 
 
 
@@ -27,14 +30,17 @@ function App() {
 
     {/* <NavBar/> */}
         <Routes>
-          <Route path="/profile" element={<Layout />} />
-
+        <Route path="/" element={<LandingPage/>}/>
+        <Route path="/aboutus" element={<AboutUs/>}/>
+        <Route path="/contactus" element={<ContactUs/>}/>
+        <Route path="/profile" element={<Layout />} />
+          
           {/* Public routes */}
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignUpPage />} />
           <Route path="/signup/vet" element={<SignUpPage />} />
           <Route path="/signup/admin" element={<SignUpPage />} />
-          {/* <Route path="/error" element={<ErrorPage />} /> */}
+          <Route path="/*" element={<ErrorPage />} />
           
 
           {/* Private routes */}
@@ -58,6 +64,7 @@ function App() {
             <Route path="/" element={<Layout />}>
               <Route path=":role/:id/profile" element={<Profile />} />
               <Route path="/:role/:id/manage/" element = {<ManageAppt/>}/>
+              <Route path="/*" element={<ErrorPage />} />
               </Route>
             </Route>
 

@@ -5,6 +5,8 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import useAuth from '../contexts/useAuth';
 import { FormGroup, FormLabel, FormControl, Alert, Form } from 'react-bootstrap';
 import CustomButton from '../components/CustomButton';
+import Footer from '../components/Footer';
+import NavBarGuest from '../components/NavBarGuest';
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -83,6 +85,10 @@ const SignUp = () => {
   }, [error]); 
 
   return (
+    <>
+    
+     <NavBarGuest/>
+     <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
     <div className="container mt-5">
       <div className="row justify-content-center">
         <div className="col-md-6">
@@ -139,6 +145,9 @@ const SignUp = () => {
         </div>
       </div>
     </div>
+    <Footer style={{ marginTop: 'auto' }} />
+    </div>
+    </>
   );
 };
 

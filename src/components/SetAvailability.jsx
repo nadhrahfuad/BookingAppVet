@@ -74,7 +74,7 @@ const generateTimeOptions = () => {
             <div className="align-items-center text-center">
               {`${availability.day_of_week} | ${availability.start_time} - ${availability.end_time}`}
               </div>
-              <Button  variant="dannoneger" className="ms-2" onClick={() => removeAvailability(availability.id)}>
+              <Button  variant="none" className="ms-2" onClick={() => removeAvailability(availability.availability_id)}>
                 <FontAwesomeIcon className= "fa-lg" icon={faTrashCan} style={{color: "#d30d2b",}} />
               </Button>
             </li>
@@ -123,11 +123,12 @@ const generateTimeOptions = () => {
 
 
     const removeAvailability = async (id) => {
+      console.log(id)
       try {
-        await axios.delete(`${BASE_URL}/availability/${id}`);
+        await axios.delete(`${BASE_URL}/${auth.role}/${auth.id}/availability/${id}`);
         const updatedAvailability = availability.filter(item => item.id !== id);
         setAvailability(updatedAvailability);
-        console.log('Deleted Availability with ID:', id);
+        console.log('Deleted availability successfully with ID:', id);
       } catch (error) {
         console.error('Error removing availability:', error);
 
@@ -199,8 +200,11 @@ const generateTimeOptions = () => {
               </Col>
             </Row>
             <div className="d-flex justify-content-end">
-            <Button variant="primary" onClick={addAvailability}>
+            <Button className="me-2" variant="primary" onClick={addAvailability} >
             Add
+          </Button>
+          <Button variant="secondary" onClick={() => setShowModal(false)}>
+            Close
           </Button>
           </div>
           </Form>
@@ -218,7 +222,7 @@ const generateTimeOptions = () => {
         <Button variant="primary" onClick={() => setShowModal(true)} >
         Add Availability
       </Button>
-          <Button variant="secondary" onClick={() => setShowModal(false)}>
+          <Button variant="secondary" onClick={() =>setShowModal(false)}>
             Close
           </Button>
         </Modal.Footer>

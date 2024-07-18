@@ -163,7 +163,7 @@ const PetModal = ({ selectedPet, show, handleClose }) => {
               <Form.Label><strong>Name</strong></Form.Label>
               <Form.Control
                 type="text"
-                name="name"
+                name="pet_name"
                 value={editedPet.name || ''}
                 onChange={handleInputChange}
                 disabled={true}

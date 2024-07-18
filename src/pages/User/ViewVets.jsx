@@ -4,6 +4,7 @@ import useAuth from '../../contexts/useAuth';
 import { Card, CardBody, CardTitle, CardText, Button, Col, Row, Container, Alert } from 'react-bootstrap';
 import BookModal from '../../components/BookModal';
 import placeholderImg from "../../assets/placeholder.jpg"
+import Footer from '../../components/Footer';
 // import SuccessModal from '../../components/SuccessModal';
 
 const ViewVets = () => {
@@ -80,6 +81,7 @@ const ViewVets = () => {
   
 
   return (
+    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
     <Container className="mt-4">
       <h2 className="mt-5 mb-4 text-center">Available Vets</h2>
       {/* {error && <p>Error fetching available vets. Please try again later.</p>} */}
@@ -88,9 +90,9 @@ const ViewVets = () => {
               </Alert>}
 
       {vetList.length > 0 && !error && (
-        <Row xs={1} md={2} lg={3} className="g-4">
+        <Row xs={1} md={2} lg={3} className="g-1">
           {vetList.map(vet => (
-            <Col key={vet.user_id} className="mb-4">
+            <Col key={vet.user_id} className="mb-4 p-3">
               <Card className="h-100 d-flex flex-column justify-content-between">
                 <div className="d-flex justify-content-center mt-4">
                   <Card.Img src={placeholderImg} className="rounded-circle img-thumbnail" alt={vet.firstname} style={{ width: '200px', height: '200px', objectFit: 'cover' }} />
@@ -119,6 +121,8 @@ const ViewVets = () => {
 
      
     </Container>
+    <Footer style={{ marginTop: 'auto' }} />
+    </div>
   );
 };
 export default ViewVets

@@ -14,14 +14,13 @@ const RequireAuth = ({ allowedAccess }) => {
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
-  // Check access role
   const hasAccess = allowedAccess.includes(auth.role);
 
   if (!hasAccess) {
     return <Navigate to="/error" state={{ from: location }} replace />;
   }
 
-  // Render nested routes
+
   return <Outlet />;
 };
 

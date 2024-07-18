@@ -102,7 +102,7 @@ const ProfileForm = ({ onSubmit }) => {
       placeholder: 'Upload picture',
     },
     {
-      name: 'petName',
+      name: 'pet_name',
       label: 'Name',
       type: 'text',
       placeholder: 'Enter pet name',

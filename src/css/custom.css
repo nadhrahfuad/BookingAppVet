@@ -1,12 +1,16 @@
 body {
   font-family: 'Roboto Slab', serif !important;
   background-image: url("../assets/bgbg.jpg") !important;
- 
   background-position: center bottom;
   background-size: cover; 
   background-attachment: fixed; 
   background-repeat: no-repeat;
-  overflow-y: auto
+  overflow-y: auto;
+  height: 100vh
+}
+
+#root{
+  height: 100vh
 }
 
 @media (max-width: 768px) {
@@ -27,6 +31,23 @@ body {
 
 
 /*  */
+
+.founder-image{
+  width: 200px;
+  height: 200px;
+  object-fit: cover ;
+  border-radius: 50%;
+  margin-bottom: 5px;
+}
+
+@media(min-width: 768px){
+  .founder-image{
+    width: 300px;
+    height: 500px;
+    border-radius: 15px;
+    margin-bottom: 0; 
+  }
+}
 
 
 #CustomTable.custom-table {
@@ -151,4 +172,6 @@ body {
 .navbar-toggler-icon {
   color: #333  !important;; 
 }
+
+
 

@@ -4,6 +4,8 @@ import axios from 'axios';
 import { useNavigate,  Link } from 'react-router-dom';
 import useAuth from '../contexts/useAuth';
 import CustomButton from '../components/CustomButton';
+import Footer from '../components/Footer';
+import NavBarGuest from '../components/NavBarGuest';
 
 const LoginForm = () => {
   const navigate = useNavigate();
@@ -70,6 +72,9 @@ const LoginForm = () => {
 
 
   return (
+    <>
+    <NavBarGuest/>
+     <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
     <div className="container mt-5">
       <div className="row justify-content-center">
         <div className="col-md-6">
@@ -120,6 +125,11 @@ const LoginForm = () => {
         </div>
       </div>
     </div>
+
+        <Footer style={{ marginTop: 'auto' }} />
+
+      </div>
+    </>
   );
 };
 

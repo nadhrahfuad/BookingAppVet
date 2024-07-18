@@ -4,6 +4,7 @@ import useAuth from '../contexts/useAuth';
 import AvailabilityForm from '../components/SetAvailability';
 import { Button, Modal, Form, Alert} from 'react-bootstrap';
 import SetAvailability from '../components/SetAvailability';
+import Footer from '../components/Footer';
 
 
 const UserProfile = () => {
@@ -194,6 +195,7 @@ if(error.respone){
     };
 
     return(
+      <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
       <div className ="container mt-2"  style={{ maxWidth: '800px', margin: '0 auto' }}>
       <Form className="form-container" style={{ maxWidth: '400px', margin: '0 auto', backgroundColor:"rgba(211, 211, 211, 0.8)", padding:"20px", borderRadius: "30px" }}>
       {error &&  <Alert className="text-center mt-4" variant="danger" onClose={clearError} >
@@ -348,6 +350,8 @@ if(error.respone){
           
           </>
           )}
+
+          
          
          
 
@@ -380,7 +384,7 @@ if(error.respone){
   
         {/* </div> */}
       </Form>
-
+      
       
 
       {auth.role === "vet" && (
@@ -393,6 +397,7 @@ if(error.respone){
 
 
       )}
+      
 
 
 
@@ -415,6 +420,8 @@ if(error.respone){
         </Modal.Footer>
       </Modal>
       )}
+      </div>
+      <Footer style={{ marginTop: 'auto' }} />
       </div>
     )
   

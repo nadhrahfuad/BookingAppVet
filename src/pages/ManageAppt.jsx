@@ -7,6 +7,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {faEye} from "@fortawesome/free-solid-svg-icons";
 import { faTrashCan, faPenToSquare } from '@fortawesome/free-solid-svg-icons';
 import PetModal from '../components/PetModal';
+import { Link } from 'react-router-dom';
+import Footer from '../components/Footer';
 
 
 
@@ -291,21 +293,31 @@ const AppointmentTable = () => {
   }
 
   return (
+    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
     <div className="p-4 mt-4 ">
       {/* {error &&  (<Alert className="text-center mt-4" variant="danger" onClose={clearError} >
 {error}
 </Alert>)} */}
 
 <Container>
+<h2 className=" mb-4 text-center">My Appointments</h2>
  {error &&  (<Alert className="text-center" variant="danger" >
 {error}
 </Alert>)}
 </Container>
+{appointments.length === 0 && auth.role === "petowner" &&(
+   <div className="mt-4 text-center d-flex justify-content-center align-items-center" style={{ minHeight: '60vh' }}>
+  <Link to={`/${auth.role}/${auth.id}/viewvets`} className="btn btn-primary" >
+  Schedule Now
+  </Link>
+  </div>
+)}
 
 
 
 
-{!error && (
+
+{!error && appointments.length >0 &&(
   <table className="custom-table" id="CustomTable">
     <thead className="table-heading">
       <tr>
@@ -554,6 +566,9 @@ const AppointmentTable = () => {
 
       
       
+    </div>
+    <Footer style={{ marginTop: 'auto' }} />
+
     </div>
   );
 };

@@ -5,6 +5,7 @@ import useAuth from "../../contexts/useAuth";
 import PetRegisterForm from "../Pets/PetRegisterForm";
 import PetCardsList from "../../components/PetCards";
 import { useNavigate } from "react-router-dom";
+import Footer from "../../components/Footer";
 
 function ViewPets() {
   const { auth } = useAuth();
@@ -68,6 +69,7 @@ function ViewPets() {
 
   return (
     <>
+    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
     <Container>
      <h2 className="mt-5 mb-4 text-center">Registered Pets</h2>
   
@@ -97,7 +99,12 @@ function ViewPets() {
           <PetRegisterForm onClose={() => setShowRegisterForm(false)} onPetRegistered={handlePetRegistered} />
         )}
       </div>
+
+      <Footer style={{ marginTop: 'auto' }} />
+      </div>
     </>
+
+    
   );
 }
 
