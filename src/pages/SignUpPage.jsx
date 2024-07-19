@@ -3,10 +3,12 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import useAuth from '../contexts/useAuth';
-import { FormGroup, FormLabel, FormControl, Alert, Form } from 'react-bootstrap';
+import { FormGroup, FormLabel, FormControl, Alert, Form, Button } from 'react-bootstrap';
 import CustomButton from '../components/CustomButton';
 import Footer from '../components/Footer';
 import NavBarGuest from '../components/NavBarGuest';
+import { auth, googleProvider } from "../firebase";
+import { createUserWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -35,26 +37,26 @@ const SignUp = () => {
   const handleSignUp = async (e) => {
     e.preventDefault();
 
-    try {
-      const response = await axios.post(`${endpoint}`, {
-        firstname,
-        email,
-        password,
-      });
+   
+  const { email, firstname, password } = e.target.elements;
 
-      console.log(response)
+  try {
 
-      const { token, role, id, firstname: firstNameResponse } = response.data;
+    const userCredential = await createUserWithEmailAndPassword(auth, email.value, password.value);
+    const firebaseUser = userCredential.user;
+    const firebase_uuid = firebaseUser.uid;
 
-      sessionStorage.setItem('token', token);
-      sessionStorage.setItem('role', role);
-      sessionStorage.setItem('id', id);
-      sessionStorage.setItem('firstname', firstNameResponse);
+    const response = await axios.post(endpoint, {
+      firstname: firstname.value,
+      email: email.value,
+      password: password.value,
+      firebase_uuid: firebase_uuid,
+    });
 
-      setAuth({ isAuthenticated: true, token, role, id, firstname: firstNameResponse });
+    console.log("Signup successful:", response.data);
 
-      navigate(`/login`);
-      console.log("User signed up")
+    navigate(`/login`);
+    console.log("User signed up");
     } catch (error) {
       console.log("Sign up failed")
       if (error.response) {
@@ -86,7 +88,6 @@ const SignUp = () => {
 
   return (
     <>
-    
      <NavBarGuest/>
      <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
     <div className="container mt-5">
@@ -142,6 +143,7 @@ const SignUp = () => {
        </p>
             
           </Form>
+
         </div>
       </div>
     </div>
