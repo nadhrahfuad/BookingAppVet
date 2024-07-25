@@ -3,7 +3,7 @@ import { NavLink } from "react-router-dom"
 
 function NavBarGuest() {
     return (
-        <Navbar bg="light" variant="light" expand="lg">
+        <Navbar bg="dark" variant="light" expand="lg">
           <Container>
             <Navbar.Brand as={NavLink} to={`/`} className="ml-3">
 
@@ -16,7 +16,7 @@ function NavBarGuest() {
                 <Nav.Link as={NavLink} to={`/`} >
                   Home
                 </Nav.Link>
-                <Nav.Link as={NavLink} to={`/aboutus`} >
+                <Nav.Link as={NavLink} to={`/aboutus`}  >
                   About Us
                 </Nav.Link>
                 <Nav.Link as={NavLink} to={`/contactus`} >

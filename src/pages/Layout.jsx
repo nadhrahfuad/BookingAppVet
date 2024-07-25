@@ -17,7 +17,7 @@ const Layout = () => {
   
   return (
     <>
-      <Navbar bg="light" variant="light" expand="lg" >
+      <Navbar bg="dark" variant="light" expand="lg" >
         <Container>
 
               <Navbar.Brand className= "ml-3" as={NavLink} to={`/${auth.role}/${auth.id}/profile`}>
@@ -95,7 +95,7 @@ const Layout = () => {
 
                     <Nav.Link className="d-flex justify-content-center" onClick={logout}>
                      <Button variant = "none">
-                    <FontAwesomeIcon className = "fa-lg"icon={faRightFromBracket}/>
+                    <FontAwesomeIcon className = "fa-lg"icon={faRightFromBracket} style={{color: "#e2e5e9",}} />
                      </Button>
                     </Nav.Link>
               </Nav>

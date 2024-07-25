@@ -82,7 +82,7 @@ const ViewVets = () => {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
-    <Container className="mt-4">
+    <Container >
       <h2 className="mt-5 mb-4 text-center">Available Vets</h2>
       {/* {error && <p>Error fetching available vets. Please try again later.</p>} */}
       {error && <Alert className="text-center" variant="danger" onClose={clearError} >

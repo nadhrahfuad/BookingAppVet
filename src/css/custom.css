@@ -159,18 +159,18 @@ body {
 }
 
 .nav-link {
-  color: grey  !important;;
+  color: lightgrey  !important;;
   padding: 10px 15px  !important;; 
   transition: all 0.3s ease  !important;; 
 }
 
 .nav-link:hover {
-  color: #333 !important;;
+  color: white !important;;
   text-decoration: none  !important;;
 }
 
 .navbar-toggler-icon {
-  color: #333  !important;; 
+  color: white  !important;; 
 }
 
 
